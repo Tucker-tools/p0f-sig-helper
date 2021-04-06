@@ -1,2 +1,2 @@
 # p0f-sig-helper
-Helper tool to make p0f signatures
+Helper tool to make p0f signatures from raw hex
