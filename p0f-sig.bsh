@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Helper script to give the needed information to build a p0f sig.
+# Please the hex of the packet in a file and pass it to the script via $1
+# Example ./sig ./1.hex
+#
+# sig = <Ver>:<ITTL>:<Olen>:<MSS>:<Window Size>,<Window Scale>:<TCP Options Layout>:<IP Quirks>:<PClass>
+#
+# Made by Tucker D. Palmatier on 2021/04/05
+# Credit to HPD v3.1 by Salim Gasmi for use of thier API
+
+HEX=`cat $1| sed 's/[[:space:]]//g'`
+API_URL="https://hpd.gasmi.net/api.php?format=text&data="
+
+echo "#########################################"
+echo "# Converting HEX to Human Readable text #"
+echo "#########################################"
+curl $API_URL$HEX > ./temp.decode
+echo "#########################################"
+echo
+echo
+echo
+echo
+echo "######################################"
+echo "# Information Needed                 #"
+echo "######################################"
+cat ./temp.decode | grep "Type:"
+cat ./temp.decode | grep "Time to live:"
+cat ./temp.decode | grep "MSS Value: 1460"
+cat ./temp.decode | grep "Window size value"
+cat ./temp.decode | grep "Window scale:"
+cat ./temp.decode | grep "Options:"
