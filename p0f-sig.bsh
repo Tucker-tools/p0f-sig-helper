@@ -10,6 +10,7 @@
 HEX=`cat $1| sed 's/[[:space:]]//g'`
 API_URL="https://hpd.gasmi.net/api.php?format=text&data="
 TMP_FILE=./temp.decode
+DB_URL="https://raw.githubusercontent.com/p0f/p0f/master/p0f.fp"
 
 # See if third parameter = "-v" - if so, display debug information
 if [[ "$2" = "-v" ]]
@@ -21,12 +22,8 @@ fi
 
 echo "######################################################"
 echo "# Converting HEX to Human Readable text with HDP API #"
+curl -s $API_URL$HEX > ./temp.decode
 echo "######################################################"
-curl $API_URL$HEX > ./temp.decode
-echo "######################################################"
-echo
-echo
-echo
 echo
 echo "######################################"
 echo "# Information Needed                 #"
@@ -51,11 +48,13 @@ else
    ID_SIG=".id+"
 fi
 
+WIN_SIZE_RED=`echo $WIN_SIZE / $MSS | bc`
 
 echo "IPv: $IPV"
 echo "TTL: $TTL"
 echo "MSS: $MSS"
 echo "Window Size: $WIN_SIZE"
+echo "Window Size Reduced: mss*$WIN_SIZE_RED"
 echo "Window Scale: $WIN_SCALE"
 echo "Options: $TCP_OPT"
 echo "Don't Fragment: $FRAG"
@@ -68,5 +67,17 @@ echo "# p0f Signature format:  sig = <Ver>:<ITTL>:<Olen>:<MSS>:<Window Size>,<Wi
 echo "##################################################################################################################################"
 echo
 echo
-echo "Raw p0f sig"
+echo "######################################"
+echo "# Raw p0f Signature found            #"
+echo "######################################"
+
 echo "sig = $IPV_SIG:$TTL:0:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0"
+echo "sig = $IPV_SIG:$TTL:0:$MSS:mss*$WIN_SIZE_RED,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0"
+echo
+echo "##################################################################"
+echo "# Downloading Signature DB From GitHub and compairing to raw sig #"
+echo "#                                                                #"
+echo "# Possible Signatures found:                                     #"
+echo "##################################################################"
+curl -s $DB_URL |grep "",$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0""
+echo "##################################################################"
