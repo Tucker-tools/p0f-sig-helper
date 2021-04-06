@@ -33,6 +33,7 @@ WIN_SIZE=`cat ./temp.decode | grep "Window size value:"|cut -d \: -f2`
 WIN_SCALE=`cat ./temp.decode | grep "Window scale:"|cut -d \: -f2`
 WIN_SCALE_SIG=`cat ./temp.decode | grep "Window scale:"|cut -d \: -f2| cut -d \( -f1`
 TCP_OPT=`cat ./temp.decode | grep "Options:"|cut -d \: -f2`
+TCP_OPT_SIG=`cat ./temp.decode | grep "Options:"|cut -d \: -f2| sed 's/No-Operation//g'`
 FRAG=`cat ./temp.decode | grep "Don't fragment:"|cut -d \: -f2`
 
 
@@ -52,4 +53,4 @@ echo "##########################################################################
 echo
 echo
 echo "Ruff start p0f sig"
-echo "sig = $IPV_SIG:$TTL:<Olen>:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT:$FRAG:<PClass>"
+echo "sig = $IPV_SIG:$TTL:<Olen>:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG:<PClass>"
