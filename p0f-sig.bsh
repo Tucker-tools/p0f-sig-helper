@@ -70,9 +70,9 @@ echo
 echo "######################################"
 echo "# Raw p0f Signature found            #"
 echo "######################################"
-
-echo "sig = $IPV_SIG:$TTL:0:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0"
-echo "sig = $IPV_SIG:$TTL:0:$MSS:mss*$WIN_SIZE_RED,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0"
+echo "Raw sig = $IPV_SIG:$TTL:0:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0"
+echo 
+echo "Reduced sig = *:$TTL:0:*:mss*$WIN_SIZE_RED,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0"
 echo
 echo "##################################################################"
 echo "# Downloading Signature DB From GitHub and compairing to raw sig #"
