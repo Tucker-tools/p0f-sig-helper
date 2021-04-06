@@ -12,6 +12,7 @@
 HEX=`cat $1| sed 's/[[:space:]]//g'`
 API_URL="https://hpd.gasmi.net/api.php?format=text&data="
 
+
 echo "#########################################"
 echo "# Converting HEX to Human Readable text #"
 echo "#########################################"
@@ -24,9 +25,17 @@ echo
 echo "######################################"
 echo "# Information Needed                 #"
 echo "######################################"
-cat ./temp.decode | grep "Type:"
-cat ./temp.decode | grep "Time to live:"
-cat ./temp.decode | grep "MSS Value: 1460"
-cat ./temp.decode | grep "Window size value"
-cat ./temp.decode | grep "Window scale:"
-cat ./temp.decode | grep "Options:"
+IPV=`cat ./temp.decode | grep "Type:"|cut -d \: -f2`
+TTL=`cat ./temp.decode | grep "Time to live:"|cut -d \: -f2`
+MSS=`cat ./temp.decode | grep "MSS Value: 1460"|cut -d \: -f2`
+WIN_SIZE=`cat ./temp.decode | grep "Window size value:"|cut -d \: -f2`
+WIN_SCALE=`cat ./temp.decode | grep "Window scale:"|cut -d \: -f2`
+TCP_OPT=`cat ./temp.decode | grep "Options:"|cut -d \: -f2`
+
+
+echo "IPv: $IPV"
+echo "TTL: $TTL"
+echo "MSS: $MSS"
+echo "Window Size: $WIN_SIZE"
+echo "Window Scale: $WIN_SCALE"
+echo "Options: $TCP_OPT"
