@@ -41,3 +41,13 @@ echo "Window Size: $WIN_SIZE"
 echo "Window Scale: $WIN_SCALE"
 echo "Options: $TCP_OPT"
 echo "Don't Fragment: $FRAG"
+echo
+echo
+echo
+echo "##################################################################################################################################"
+echo "# p0f Signature format:  sig = <Ver>:<ITTL>:<Olen>:<MSS>:<Window Size>,<Window Scale>:<TCP Options Layout>:<IP Quirks>:<PClass>" #
+echo "##################################################################################################################################"
+echo
+echo
+echo "Ruff start p0f sig"
+echo "sig = $IPV:$TTL:<Olen>:$MSS:$WIN_SIZE,$WIN_SCALE:$TCP_OPT:$FRAG:<PClass>"
