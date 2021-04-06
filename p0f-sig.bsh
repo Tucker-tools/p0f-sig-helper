@@ -31,6 +31,7 @@ MSS=`cat ./temp.decode | grep "MSS Value: 1460"|cut -d \: -f2`
 WIN_SIZE=`cat ./temp.decode | grep "Window size value:"|cut -d \: -f2`
 WIN_SCALE=`cat ./temp.decode | grep "Window scale:"|cut -d \: -f2`
 TCP_OPT=`cat ./temp.decode | grep "Options:"|cut -d \: -f2`
+FRAG=`cat ./temp.decode | grep "Don't fragment:"|cut -d \: -f2`
 
 
 echo "IPv: $IPV"
@@ -39,3 +40,4 @@ echo "MSS: $MSS"
 echo "Window Size: $WIN_SIZE"
 echo "Window Scale: $WIN_SCALE"
 echo "Options: $TCP_OPT"
+echo "Don't Fragment: $FRAG"
