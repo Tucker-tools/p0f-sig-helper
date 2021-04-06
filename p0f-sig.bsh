@@ -26,14 +26,14 @@ echo "######################################"
 echo "# Information Needed                 #"
 echo "######################################"
 IPV=`cat ./temp.decode | grep "Type:"|cut -d \: -f2`
-IPV_SIG=`cat ./temp.decode | grep "Type:"|cut -d \: -f2|cut -d \( -f1`
-TTL=`cat ./temp.decode | grep "Time to live:"|cut -d \: -f2`
-MSS=`cat ./temp.decode | grep "MSS Value:"|cut -d \: -f2`
-WIN_SIZE=`cat ./temp.decode | grep "Window size value:"|cut -d \: -f2`
+IPV_SIG=`cat ./temp.decode | grep "Type:"|cut -d \: -f2|cut -d \( -f1|xargs`
+TTL=`cat ./temp.decode | grep "Time to live:"|cut -d \: -f2|xargs`
+MSS=`cat ./temp.decode | grep "MSS Value:"|cut -d \: -f2|xargs`
+WIN_SIZE=`cat ./temp.decode | grep "Window size value:"|cut -d \: -f2|xargs`
 WIN_SCALE=`cat ./temp.decode | grep "Window scale:"|cut -d \: -f2`
-WIN_SCALE_SIG=`cat ./temp.decode | grep "Window scale:"|cut -d \: -f2| cut -d \( -f1`
+WIN_SCALE_SIG=`cat ./temp.decode | grep "Window scale:"|cut -d \: -f2| cut -d \( -f1|xargs`
 TCP_OPT=`cat ./temp.decode | grep "Options:"|cut -d \: -f2`
-TCP_OPT_SIG=`cat ./temp.decode | grep "Options:"|cut -d \: -f2| sed 's/No-Operation//g'`
+TCP_OPT_SIG=`cat ./temp.decode | grep "Options:"|cut -d \: -f2| sed 's/No-Operation//g'|xargs`
 FRAG=`cat ./temp.decode | grep "Don't fragment:"|cut -d \: -f2`
 
 
@@ -48,9 +48,10 @@ echo
 echo
 echo
 echo "##################################################################################################################################"
-echo "# p0f Signature format:  sig = <Ver>:<ITTL>:<Olen>:<MSS>:<Window Size>,<Window Scale>:<TCP Options Layout>:<IP Quirks>:<PClass>" #
+echo "# p0f Signature format:  sig = <Ver>:<ITTL>:<Olen>:<MSS>:<Window Size>,<Window Scale>:<TCP Options Layout>:<IP Quirks>:<PClass>  #"
 echo "##################################################################################################################################"
 echo
 echo
 echo "Ruff start p0f sig"
-echo "sig = $IPV_SIG:$TTL:<Olen>:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG:<PClass>"
+echo "sig = $IPV_SIG:$TTL:0:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG:0"
+
