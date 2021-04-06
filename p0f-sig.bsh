@@ -1,17 +1,23 @@
 #!/bin/bash
 
 # Helper script to give the needed information to build a p0f sig.
-# Please the hex of the packet in a file and pass it to the script via $1
+# Place the hex of the packet in a file (no line numbers and in a single line) and pass it to the script via $1
 # Example ./sig ./1.hex
-#
-# sig = <Ver>:<ITTL>:<Olen>:<MSS>:<Window Size>,<Window Scale>:<TCP Options Layout>:<IP Quirks>:<PClass>
 #
 # Made by Tucker D. Palmatier on 2021/04/05
 # Credit to HPD v3.1 by Salim Gasmi for use of thier API
 
 HEX=`cat $1| sed 's/[[:space:]]//g'`
 API_URL="https://hpd.gasmi.net/api.php?format=text&data="
+TMP_FILE=./temp.decode
 
+# See if third parameter = "-v" - if so, display debug information
+if [[ "$2" = "-v" ]]
+then
+   DEBUG=true
+else
+   DEBUG=false
+fi
 
 echo "######################################################"
 echo "# Converting HEX to Human Readable text with HDP API #"
@@ -32,10 +38,19 @@ MSS=`cat $TMP_FILE | grep "MSS Value:"|cut -d \: -f2|xargs`
 WIN_SIZE=`cat $TMP_FILE | grep "Window size value:"|cut -d \: -f2|xargs`
 WIN_SCALE=`cat $TMP_FILE | grep "Window scale:"|cut -d \: -f2`
 WIN_SCALE_SIG=`echo $WIN_SCALE| cut -d \( -f1|xargs`
-TCP_OPT=`cat $TMP_FILE | grep "Options:"|cut -d \: -f2`
-TCP_OPT_SIG=`echo $TCP_OPT| sed 's/No-Operation//g'|xargs`
+TCP_OPT=`cat $TMP_FILE | grep "Options:"|cut -d , -f2-100`
+TCP_OPT_SIG=`echo $TCP_OPT | sed 's/ No-Operation (NOP)/nop/g'|sed 's/ Timestamps/ts/g' |sed 's/ Window scale/ws/g' |sed 's/ SACK permitted/sok/g' |sed 's/Maximum segment size/mss/g'| xargs`
 FRAG=`cat $TMP_FILE | grep "Don't fragment:"|cut -d \: -f2|xargs`
-ID=`cat $TMP_FILE | grep "Identification:"|cut -d \: -f2|xargs`
+FRAG_SIG=`echo $FRAG | sed 's/Set/df/g'`
+ID=`cat $TMP_FILE | grep "Identification:"|cut -d \: -f2|cut -d \( -f1 | xargs`
+
+if [[ "$ID" = "0x0000" ]]
+then
+   ID_SIG=""
+else
+   ID_SIG=".id+"
+fi
+
 
 echo "IPv: $IPV"
 echo "TTL: $TTL"
@@ -53,5 +68,5 @@ echo "# p0f Signature format:  sig = <Ver>:<ITTL>:<Olen>:<MSS>:<Window Size>,<Wi
 echo "##################################################################################################################################"
 echo
 echo
-echo "Ruff start p0f sig"
-echo "sig = $IPV_SIG:$TTL:0:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG/$ID:0"
+echo "Raw p0f sig"
+echo "sig = $IPV_SIG:$TTL:0:$MSS:$WIN_SIZE,$WIN_SCALE_SIG:$TCP_OPT_SIG:$FRAG_SIG$ID_SIG:0"
