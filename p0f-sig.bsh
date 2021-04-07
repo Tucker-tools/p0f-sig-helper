@@ -2,7 +2,7 @@
 
 # Helper script to give the needed information to build a p0f sig.
 # Place the hex of the packet in a file (no line numbers and in a single line) and pass it to the script via $1
-# Example ./sig ./1.hex
+# Example ./pof-sig.bsh ./1.hex
 #
 # Made by Tucker D. Palmatier on 2021/04/05
 # Credit to HPD v3.1 by Salim Gasmi for use of thier API
